@@ -8,20 +8,30 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 currentDir = fso.GetParentFolderName(WScript.ScriptFullName)
 
 ' Define paths
+exePathGUI = currentDir & "\dist\DACKeepAlive_GUI.exe"
 exePath = currentDir & "\dist\DACKeepAlive.exe"
+pythonPathGUI = currentDir & "\tone_generator_gui.py"
 pythonPath = currentDir & "\tone_generator.py"
 
-' Check which file exists
-If fso.FileExists(exePath) Then
+' Check which file exists (prefer GUI version)
+If fso.FileExists(exePathGUI) Then
+    targetPath = exePathGUI
+    targetName = "DACKeepAlive_GUI.exe"
+ElseIf fso.FileExists(exePath) Then
     targetPath = exePath
     targetName = "DACKeepAlive.exe"
+ElseIf fso.FileExists(pythonPathGUI) Then
+    ' If using Python script, create a shortcut that runs it with pythonw
+    targetPath = "pythonw.exe"
+    targetName = "tone_generator_gui.py"
+    arguments = Chr(34) & pythonPathGUI & Chr(34)
 ElseIf fso.FileExists(pythonPath) Then
     ' If using Python script, create a shortcut that runs it with pythonw
     targetPath = "pythonw.exe"
     targetName = "tone_generator.py"
     arguments = Chr(34) & pythonPath & Chr(34)
 Else
-    MsgBox "Error: Could not find DACKeepAlive.exe or tone_generator.py", vbCritical, "File Not Found"
+    MsgBox "Error: Could not find any executable or Python script", vbCritical, "File Not Found"
     WScript.Quit
 End If
 
@@ -32,7 +42,7 @@ startupFolder = WshShell.SpecialFolders("Startup")
 shortcutPath = startupFolder & "\DACKeepAlive.lnk"
 Set shortcut = WshShell.CreateShortcut(shortcutPath)
 
-If fso.FileExists(exePath) Then
+If fso.FileExists(exePathGUI) Or fso.FileExists(exePath) Then
     shortcut.TargetPath = targetPath
     shortcut.WorkingDirectory = currentDir & "\dist"
 Else

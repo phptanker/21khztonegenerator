@@ -4,9 +4,13 @@ A simple Windows program that continuously plays a 21kHz tone to keep your DAC (
 
 ## Features
 
-- Generates a continuous 21kHz sine wave
-- Low amplitude to avoid any audible interference
-- Runs in the background
+- **Two versions available:**
+  - **GUI version** (`tone_generator_gui.py`) - With controls and system tray
+  - **Console version** (`tone_generator.py`) - Runs in background
+- Generates a continuous tone (default 21kHz)
+- Adjustable frequency (1-24 kHz) and volume (1-100%)
+- System tray support - minimize to taskbar
+- Start/Stop control
 - Can be configured for Windows autostart
 
 ## Installation
@@ -19,21 +23,32 @@ A simple Windows program that continuously plays a 21kHz tone to keep your DAC (
    pip install -r requirements.txt
    ```
 3. Run the program:
-   ```
-   python tone_generator.py
-   ```
+   - **GUI version (recommended):** `python tone_generator_gui.py`
+   - **Console version:** `python tone_generator.py`
 
 ### Option 2: Create Windows Executable
 
-1. Install PyInstaller:
+1. Install dependencies:
    ```
+   pip install -r requirements.txt
    pip install pyinstaller
    ```
-2. Build the executable:
-   ```
-   pyinstaller --onefile --windowed --name DACKeepAlive tone_generator.py
-   ```
+2. Double-click `build_exe.bat` and choose which version to build
+   - **Option 1:** GUI version with controls
+   - **Option 2:** Console version (background only)
 3. The executable will be in the `dist` folder
+
+## Using the GUI Version
+
+The GUI version (`tone_generator_gui.py` or `DACKeepAlive_GUI.exe`) provides:
+
+- **Frequency Control:** Adjust from 1 kHz to 24 kHz using slider or spinbox
+- **Volume Control:** Set volume from 1% to 100%
+- **Start/Stop Button:** Control tone playback
+- **System Tray:** Minimize to tray - right-click tray icon to show/start/stop/quit
+- **Live Status:** See current frequency and volume in real-time
+
+Simply adjust the settings and click **Start** to begin playing the tone. You can minimize the window to the system tray while it runs in the background.
 
 ## Windows Autostart Setup
 
@@ -61,8 +76,13 @@ With the value pointing to your executable path.
 
 ## Configuration
 
-You can modify these parameters in `tone_generator.py`:
+### GUI Version
+Use the built-in controls to adjust settings in real-time:
+- **Frequency:** 1-24 kHz (adjustable via slider/spinbox)
+- **Volume:** 1-100% (adjustable via slider/spinbox)
 
+### Console Version
+Modify these parameters in `tone_generator.py`:
 - **FREQUENCY**: Tone frequency in Hz (default: 21000)
 - **SAMPLE_RATE**: Audio sample rate (default: 48000)
 - **AMPLITUDE**: Volume level from 0.0 to 1.0 (default: 0.1)
@@ -70,8 +90,8 @@ You can modify these parameters in `tone_generator.py`:
 
 ## Stopping the Program
 
-- If running in console: Press `Ctrl+C`
-- If running as executable: Use Task Manager to end the process
+- **GUI version:** Click the **Stop** button or right-click tray icon → Quit
+- **Console version:** Press `Ctrl+C` or use Task Manager to end the process
 
 ## Troubleshooting
 
